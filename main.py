@@ -232,37 +232,33 @@ def catalog_none():
 
 
 
-
-
 def input_name(current_index=None):
     while True:
         name = input("\nВведіть назву гри: ")
 
         if if_game_exists(name, current_index):
-            print("\nГра з такою назвою вже існує. Введіть іншу назву.")
+            print("Гра з такою назвою вже існує. Введіть іншу назву.")
             continue
+        elif space_input(name):
+            continue
+
         return name
 
 def if_game_exists(name, exclude_index=None):
     return any(game.Name == name for i, game in enumerate(listC) if i != exclude_index)
 
-def input_status():
-    while True:
-        print("\nВведіть статус гри")
-        for i, status in enumerate(statM, start=1):
-            print(f"{i}. {status}")
-        choice = input("Ваш вибір: ")
-        if choice.isdigit() and 1 <= int(choice) <= len(statM):
-            return statM[int(choice) - 1]
-        else:
-            print("\nНевірний вибір статусу. Спробуйте ще раз.")
+def space_input(text):
+    if text == "":
+        print("Поле вводу не повинне бути пустим.")
+        return True
+    return False
 
 def input_platform():
+    for i, platform in enumerate(platM, start=1):
+        print(f"{i}. {platform}")
+    print(f"{i + 1}. Свiй варіант")
     while True:
         print("\nВведіть платформу гри")
-        for i, platform in enumerate(platM, start=1):
-            print(f"{i}. {platform}")
-        print(f"{i + 1}. Свiй варіант")
         choice = input("Ваш вибір: ")
         if choice.isdigit() and 1 <= int(choice) <= len(platM):
             return platM[int(choice) - 1]
@@ -270,12 +266,23 @@ def input_platform():
             custom_platform = input("Введіть власну платформу: ")
             return custom_platform
         else:
-            print("\nНевірний вибір платформи. Спробуйте ще раз.")
+            print("Невірний вибір платформи. Спробуйте ще раз.")
+
+def input_status():
+    print("\nВведіть статус гри")
+    for i, status in enumerate(statM, start=1):
+        print(f"{i}. {status}")
+    while True:
+        choice = input("Ваш вибір: ")
+        if choice.isdigit() and 1 <= int(choice) <= len(statM):
+            return statM[int(choice) - 1]
+        else:
+            print("\nНевірний вибір статусу. Спробуйте ще раз.")
 
 def input_rating():
     while True:
         try:
-            rating = int(input("Введіть оцінку гри (1-10): "))
+            rating = int(input("\nВведіть оцінку гри (1-10): "))
             if 1 <= rating <= 10:
                 return rating
             else:
@@ -288,13 +295,16 @@ def sort_catalog():
 
 
 
-
+def title():
+    print("────────────")
+    print("Каталог iгор")
+    print("────────────")
 
 
 def Menu():
     while True:
         save_catalog()
-        print("\n\nМеню:")
+        print("\nМеню:")
         print("1. Додати гру")
         print("2. Вивести каталог ігор")
         print("3. Редагувати")
@@ -327,8 +337,9 @@ def Menu():
             print("Вихід з програми.")
             break
         else:
-            print("Невірний вибір. Спробуйте ще раз.")
+            print("Невірний вибір. Спробуйте ще раз.\n")
 
+title()
 
 if load_catalog():
     Menu()
